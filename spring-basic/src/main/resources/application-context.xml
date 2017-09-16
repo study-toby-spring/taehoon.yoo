@@ -10,4 +10,17 @@
                 type="annotation"
                 expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:foo.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean class="io.noep.TestBean">
+        <property name="foo" value="${foo}"/>
+        <property name="bar" value="${bar}"/>
+    </bean>
 </beans>

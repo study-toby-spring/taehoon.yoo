@@ -1,5 +1,7 @@
 package io.noep.controller;
 
+import io.noep.TestBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,12 +19,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class HelloController {
 
+    @Autowired
+    private TestBean testbean;
+
     @RequestMapping(
             path = {"hello"},
             method = RequestMethod.GET)
     @ResponseBody
     public String hello() {
-        return "Hello world";
+        String foo = testbean.getFoo();
+        String bar = testbean.getBar();
+
+        return foo+ bar;
     }
 
 }
