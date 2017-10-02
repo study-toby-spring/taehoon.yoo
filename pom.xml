@@ -11,6 +11,7 @@
     <modules>
         <module>spring-basic</module>
         <module>spring-bean-test</module>
+        <module>toby-01</module>
     </modules>
 
 
