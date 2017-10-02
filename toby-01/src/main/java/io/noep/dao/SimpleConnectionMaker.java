@@ -8,14 +8,14 @@ import java.sql.SQLException;
  * Created by Taehoon Yoo
  * User  : taehoon
  * Date  : 2017. 10. 2.
- * Time  : 오후 12:39
+ * Time  : 오후 12:42
  * Page  : http:noep.github.io
  * Email : noep@naver.com
  * Desc  :
  */
-public class NUserDao extends UserDao {
+public class SimpleConnectionMaker {
 
-    public Connection getConnection() throws ClassNotFoundException, SQLException {
+    public Connection makeNewConnection() throws ClassNotFoundException, SQLException {
         /**
          * ref : https://slipp.net/questions/276
          * Class.forName 을 실행하는 경우 문자열로 전달되는 클래스가 메모리 상에 등록된다.
@@ -32,4 +32,5 @@ public class NUserDao extends UserDao {
                 "jdbc:mysql://localhost/toby-test", "root", null);
         return c;
     }
+
 }
