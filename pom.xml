@@ -11,8 +11,6 @@
     <modules>
         <module>spring-basic</module>
         <module>spring-bean-test</module>
-        <module>spring-mvc</module>
-        <module>spring-logging-logback</module>
     </modules>
 
 
