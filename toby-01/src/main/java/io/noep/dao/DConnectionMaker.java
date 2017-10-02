@@ -8,13 +8,12 @@ import java.sql.SQLException;
  * Created by Taehoon Yoo
  * User  : taehoon
  * Date  : 2017. 10. 2.
- * Time  : 오후 12:42
+ * Time  : 오후 12:52
  * Page  : http:noep.github.io
  * Email : noep@naver.com
  * Desc  :
  */
-public class SimpleConnectionMaker {
-
+public class DConnectionMaker implements ConnectionMaker {
     public Connection makeNewConnection() throws ClassNotFoundException, SQLException {
         /**
          * ref : https://slipp.net/questions/276
@@ -32,5 +31,4 @@ public class SimpleConnectionMaker {
                 "jdbc:mysql://localhost/toby-test", "root", null);
         return c;
     }
-
 }

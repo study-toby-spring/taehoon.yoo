@@ -1,5 +1,7 @@
 package io.noep;
 
+import io.noep.dao.ConnectionMaker;
+import io.noep.dao.DConnectionMaker;
 import io.noep.dao.UserDao;
 import io.noep.domain.User;
 
@@ -17,9 +19,11 @@ import java.sql.SQLException;
 public class Application {
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        UserDao dao = new UserDao();
+        ConnectionMaker connectionMaker = new DConnectionMaker();
+        UserDao dao = new UserDao(connectionMaker);
 
-        User user = new User();        user.setId("whiteship");
+        User user = new User();
+        user.setId("whiteship");
         user.setName("유태훈");
         user.setPassword("single");
 
