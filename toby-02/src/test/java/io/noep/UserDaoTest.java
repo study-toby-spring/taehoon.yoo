@@ -2,10 +2,10 @@ package io.noep;
 
 import io.noep.dao.UserDao;
 import io.noep.domain.User;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.sql.SQLException;
@@ -23,63 +23,67 @@ import static org.junit.Assert.assertThat;
  * Desc  :
  */
 public class UserDaoTest {
+    private UserDao userDao;
+
+    /**
+     * 픽스처 : 테스트를 수행하는 데 필요한 정보나 오브젝트
+     *
+     */
+    private User user1;
+    private User user2;
+    private User user3;
+
+    @Before
+    public void setUp() {
+        ApplicationContext context = new
+                ClassPathXmlApplicationContext("applicationContext.xml");
+        userDao = context.getBean("userDao", UserDao.class);
+
+        this.user1 = new User("gyumee", "박성철", "springno1");
+        this.user2 = new User("apple", "사과", "ihaveanapple");
+        this.user3 = new User("pineapple", "파인애플", "ihaveapineapple");
+
+    }
 
     @Test
     public void addAndGet() throws SQLException {
-        ApplicationContext context = new
-                ClassPathXmlApplicationContext("applicationContext.xml");
 
-        UserDao dao = context.getBean("userDao", UserDao.class);
-        User user1 = new User("gyumee", "박성철", "springno1");
-        User user2 = new User("apple", "사과", "ihaveanapple");
+        userDao.deleteAll();
+        assertThat(userDao.getCount(), is(0));
 
-        dao.deleteAll();
-        assertThat(dao.getCount(), is(0));
+        userDao.add(user1);
+        userDao.add(user2);
+        assertThat(userDao.getCount(), is(2));
 
-
-        dao.add(user1);
-        dao.add(user2);
-        assertThat(dao.getCount(), is(2));
-
-        User userget1 = dao.get(user1.getId());
+        User userget1 = userDao.get(user1.getId());
         assertThat(userget1.getName(), is(user1.getName()));
         assertThat(userget1.getPassword(), is(user1.getPassword()));
 
-        User userget2 = dao.get(user2.getId());
+        User userget2 = userDao.get(user2.getId());
         assertThat(userget2.getName(), is(user2.getName()));
         assertThat(userget2.getPassword(), is(user2.getPassword()));
     }
 
     @Test(expected = EmptyResultDataAccessException.class)
     public void getUserFailure() throws SQLException {
-        ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-        UserDao dao = context.getBean("userDao", UserDao.class);
+        userDao.deleteAll();
+        assertThat(userDao.getCount(),is(0));
 
-        dao.deleteAll();
-        assertThat(dao.getCount(),is(0));
-
-        dao.get("unknown_id");
+        userDao.get("unknown_id");
     }
 
     @Test
     public void count() throws SQLException {
-        ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-        UserDao dao = context.getBean("userDao", UserDao.class);
+        userDao.deleteAll();
+        assertThat(userDao.getCount(), is(0));
 
-        User user1 = new User("gyumee", "박성철", "springno1");
-        User user2 = new User("apple", "사과", "ihaveanapple");
-        User user3 = new User("pineapple", "파인애플", "ihaveapineapple");
+        userDao.add(user1);
+        assertThat(userDao.getCount(), is(1));
 
-        dao.deleteAll();
-        assertThat(dao.getCount(), is(0));
+        userDao.add(user2);
+        assertThat(userDao.getCount(), is(2));
 
-        dao.add(user1);
-        assertThat(dao.getCount(), is(1));
-
-        dao.add(user2);
-        assertThat(dao.getCount(), is(2));
-
-        dao.add(user3);
-        assertThat(dao.getCount(), is(3));
+        userDao.add(user3);
+        assertThat(userDao.getCount(), is(3));
     }
 }
