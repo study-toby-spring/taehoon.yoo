@@ -4,9 +4,12 @@ import io.noep.dao.UserDao;
 import io.noep.domain.User;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.sql.SQLException;
 
@@ -22,7 +25,14 @@ import static org.junit.Assert.assertThat;
  * Email : noep@naver.com
  * Desc  :
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "/applicationContext.xml")
 public class UserDaoTest {
+
+    @Autowired
+    private ApplicationContext context;
+
+    @Autowired
     private UserDao userDao;
 
     /**
@@ -35,9 +45,11 @@ public class UserDaoTest {
 
     @Before
     public void setUp() {
-        ApplicationContext context = new
-                ClassPathXmlApplicationContext("applicationContext.xml");
-        userDao = context.getBean("userDao", UserDao.class);
+        /**
+         * 클래스 인스턴스는 매번 초기화되지만, applicationContext는 매번 동일하
+         */
+        System.out.println(this.context);
+        System.out.println(this);
 
         this.user1 = new User("gyumee", "박성철", "springno1");
         this.user2 = new User("apple", "사과", "ihaveanapple");
