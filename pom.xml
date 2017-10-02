@@ -12,6 +12,7 @@
         <module>spring-basic</module>
         <module>spring-bean-test</module>
         <module>toby-01</module>
+        <module>toby-02</module>
     </modules>
 
 
