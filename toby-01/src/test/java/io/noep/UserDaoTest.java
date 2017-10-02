@@ -1,7 +1,6 @@
 package io.noep;
 
-import io.noep.dao.ConnectionMaker;
-import io.noep.dao.DConnectionMaker;
+import io.noep.dao.DaoFactory;
 import io.noep.dao.UserDao;
 import io.noep.domain.User;
 
@@ -16,11 +15,10 @@ import java.sql.SQLException;
  * Email : noep@naver.com
  * Desc  :
  */
-public class Application {
+public class UserDaoTest {
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        ConnectionMaker connectionMaker = new DConnectionMaker();
-        UserDao dao = new UserDao(connectionMaker);
+        UserDao dao = new DaoFactory().userDao();
 
         User user = new User();
         user.setId("whiteship");
