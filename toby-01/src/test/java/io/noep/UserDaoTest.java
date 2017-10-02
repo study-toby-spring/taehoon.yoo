@@ -1,6 +1,6 @@
 package io.noep;
 
-import io.noep.dao.DaoFactory;
+import io.noep.dao.factory.DaoFactory;
 import io.noep.dao.UserDao;
 import io.noep.domain.User;
 import org.springframework.context.ApplicationContext;

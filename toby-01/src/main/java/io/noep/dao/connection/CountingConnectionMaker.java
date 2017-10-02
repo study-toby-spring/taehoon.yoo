@@ -1,4 +1,4 @@
-package io.noep.dao;
+package io.noep.dao.connection;
 
 import java.sql.Connection;
 import java.sql.SQLException;

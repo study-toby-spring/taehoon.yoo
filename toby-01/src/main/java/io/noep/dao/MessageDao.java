@@ -1,5 +1,7 @@
 package io.noep.dao;
 
+import io.noep.dao.connection.ConnectionMaker;
+
 /**
  * Created by Taehoon Yoo
  * User  : taehoon

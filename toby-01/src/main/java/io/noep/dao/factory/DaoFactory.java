@@ -1,7 +1,15 @@
-package io.noep.dao;
+package io.noep.dao.factory;
 
+import io.noep.dao.AccountDao;
+import io.noep.dao.MessageDao;
+import io.noep.dao.UserDao;
+import io.noep.dao.connection.ConnectionMaker;
+import io.noep.dao.connection.DConnectionMaker;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+
+import javax.sql.DataSource;
 
 /**
  * Created by Taehoon Yoo
@@ -18,7 +26,7 @@ public class DaoFactory {
     @Bean
     public UserDao userDao() {
         UserDao userDao = new UserDao();
-        userDao.setConnectionMaker(connectionMaker());
+        userDao.setDataSource(datasource());
         return userDao;
     }
 
@@ -34,4 +42,17 @@ public class DaoFactory {
     public ConnectionMaker connectionMaker() {
         return new DConnectionMaker();
     }
+
+    @Bean
+    public DataSource datasource() {
+        SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
+
+        dataSource.setDriverClass(com.mysql.jdbc.Driver.class);
+        dataSource.setUrl("jdbc:mysql://localhost/toby-test");
+        dataSource.setUsername("root");
+        dataSource.setPassword(null);
+
+        return dataSource;
+    }
 }
+

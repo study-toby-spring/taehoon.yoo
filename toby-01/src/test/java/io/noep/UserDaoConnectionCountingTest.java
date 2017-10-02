@@ -1,8 +1,7 @@
 package io.noep;
 
-import io.noep.dao.CountingConnectionMaker;
-import io.noep.dao.CountingDaoFactory;
-import io.noep.dao.DConnectionMaker;
+import io.noep.dao.connection.CountingConnectionMaker;
+import io.noep.dao.factory.CountingDaoFactory;
 import io.noep.dao.UserDao;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
