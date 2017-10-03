@@ -1,4 +1,4 @@
-package io.noep;
+package io.noep.callback;
 
 import org.junit.Before;
 import org.junit.Test;

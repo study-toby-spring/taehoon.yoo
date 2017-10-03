@@ -2,9 +2,11 @@ package io.noep.dao;
 
 import io.noep.domain.User;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by Taehoon Yoo
@@ -17,17 +19,18 @@ import java.sql.SQLException;
  */
 public class UserDao {
 
-    private DataSource dataSource;
-    private JdbcContext jdbcContext;
+    private RowMapper<User> userMapper = (resultSet, i) -> {
+        User user = new User();
+        user.setId(resultSet.getString("id"));
+        user.setName(resultSet.getString("name"));
+        user.setPassword(resultSet.getString("password"));
+        return user;
+    };
+
     private JdbcTemplate jdbcTemplate;
 
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-        this.dataSource = dataSource;
-    }
-
-    public void setJdbcContext(JdbcContext jdbcContext) {
-        this.jdbcContext = jdbcContext;
     }
 
     /**
@@ -36,25 +39,20 @@ public class UserDao {
      * @param user
      * @throws SQLException
      */
-    public void add(User user) throws SQLException {
+    public void add(User user) {
 
         this.jdbcTemplate.update("insert into users(id,name,password) values (?,?,?)",
                 user.getId(), user.getName(), user.getPassword());
     }
 
-    public void deleteAll() throws SQLException {
+    public void deleteAll() {
         this.jdbcTemplate.update("delete from users");
     }
 
-    public User get(String id) throws SQLException {
+    public User get(String id) {
+
         return this.jdbcTemplate.queryForObject("select * from users where id = ?",
-                new Object[]{id}, (resultSet, i) -> {
-                    User user = new User();
-                    user.setId(resultSet.getString("id"));
-                    user.setName(resultSet.getString("name"));
-                    user.setPassword(resultSet.getString("password"));
-                    return user;
-                });
+                new Object[]{id}, userMapper);
     }
 
     public int getCount() {
@@ -67,4 +65,7 @@ public class UserDao {
     }
 
 
+    public List<User> getAll() {
+        return this.jdbcTemplate.query("select * from users order by id", userMapper);
+    }
 }
