@@ -1,5 +1,6 @@
 package io.noep.dao.factory;
 
+import io.noep.dao.JdbcContext;
 import io.noep.dao.UserDao;
 import io.noep.dao.connection.ConnectionMaker;
 import io.noep.dao.connection.CountingConnectionMaker;
@@ -26,6 +27,7 @@ public class CountingDaoFactory {
     public UserDao userDao() {
         UserDao userDao = new UserDao();
         userDao.setDataSource(datasource());
+        userDao.setJdbcContext(jdbcContext());
         return userDao;
     }
     @Bean
@@ -48,5 +50,10 @@ public class CountingDaoFactory {
         dataSource.setPassword(null);
 
         return dataSource;
+    }
+
+    @Bean
+    public JdbcContext jdbcContext() {
+        return new JdbcContext();
     }
 }

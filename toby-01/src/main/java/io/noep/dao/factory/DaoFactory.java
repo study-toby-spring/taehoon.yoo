@@ -1,6 +1,7 @@
 package io.noep.dao.factory;
 
 import io.noep.dao.AccountDao;
+import io.noep.dao.JdbcContext;
 import io.noep.dao.MessageDao;
 import io.noep.dao.UserDao;
 import io.noep.dao.connection.ConnectionMaker;
@@ -27,6 +28,7 @@ public class DaoFactory {
     public UserDao userDao() {
         UserDao userDao = new UserDao();
         userDao.setDataSource(datasource());
+        userDao.setJdbcContext(jdbcContext());
         return userDao;
     }
 
@@ -53,6 +55,11 @@ public class DaoFactory {
         dataSource.setPassword(null);
 
         return dataSource;
+    }
+
+    @Bean
+    public JdbcContext jdbcContext() {
+        return new JdbcContext();
     }
 }
 
