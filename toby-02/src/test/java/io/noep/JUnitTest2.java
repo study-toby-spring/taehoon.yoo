@@ -10,13 +10,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
-import static org.junit.matchers.JUnitMatchers.either;
 import static org.junit.Assert.assertTrue;
+import static org.junit.matchers.JUnitMatchers.hasItem;
 
 /**
  * Created by Taehoon Yoo
@@ -29,7 +26,7 @@ import static org.junit.Assert.assertTrue;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration
+@ContextConfiguration(locations = "/junit.xml")
 public class JUnitTest2 {
 
     @Autowired
@@ -61,9 +58,8 @@ public class JUnitTest2 {
         assertThat(testObjectSet, not(hasItem(this)));
         testObjectSet.add(this);
 
-        // todo either deprecated됨 되는걸로 고치자
         assertThat(contextObject,
-                either(is(nullValue())).or(is(this.contextObject)));
+                either(is(this.contextObject)).or(is(nullValue())));
         contextObject = this.context;
     }
 }
