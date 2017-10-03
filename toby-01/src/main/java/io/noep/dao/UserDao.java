@@ -32,15 +32,8 @@ public class UserDao {
      */
     public void add(User user) throws SQLException {
 
-        class AddStatement implements StatementStrategy {
-
-            User user;
-
-            public AddStatement(User user) {
-                this.user = user;
-            }
-
-            public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+        jdbcContextWithStatementStrategy(
+            c -> {
                 PreparedStatement ps =
                         c.prepareStatement("insert into users(id,name,password) " +
                                 "values (?,?,?)");
@@ -50,10 +43,7 @@ public class UserDao {
 
                 return ps;
             }
-        }
-
-        StatementStrategy st = new AddStatement(user);
-        jdbcContextWithStatementStrategy(st);
+        );
     }
 
     public User get(String id) throws SQLException {
@@ -83,8 +73,9 @@ public class UserDao {
     }
 
     public void deleteAll() throws SQLException {
-        StatementStrategy st = new DeleteAllStatement();
-        jdbcContextWithStatementStrategy(st);
+        jdbcContextWithStatementStrategy(
+            c -> c.prepareStatement("delete from users")
+        );
     }
 
     public int getCount() throws SQLException {
