@@ -3,7 +3,7 @@ package io.noep.dao.factory;
 import io.noep.dao.AccountDao;
 import io.noep.dao.JdbcContext;
 import io.noep.dao.MessageDao;
-import io.noep.dao.UserDao;
+import io.noep.dao.UserDaoJdbc;
 import io.noep.dao.connection.ConnectionMaker;
 import io.noep.dao.connection.DConnectionMaker;
 import org.springframework.context.annotation.Bean;
@@ -25,10 +25,9 @@ import javax.sql.DataSource;
 public class DaoFactory {
 
     @Bean
-    public UserDao userDao() {
-        UserDao userDao = new UserDao();
+    public UserDaoJdbc userDao() {
+        UserDaoJdbc userDao = new UserDaoJdbc();
         userDao.setDataSource(datasource());
-        userDao.setJdbcContext(jdbcContext());
         return userDao;
     }
 

@@ -1,7 +1,7 @@
 package io.noep;
 
 import io.noep.dao.factory.DaoFactory;
-import io.noep.dao.UserDao;
+import io.noep.dao.UserDaoJdbc;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -28,8 +28,8 @@ public class DaoFactoryTest {
     @Test
     public void test() {
         DaoFactory factory = new DaoFactory();
-        UserDao dao1 = factory.userDao();
-        UserDao dao2 = factory.userDao();
+        UserDaoJdbc dao1 = factory.userDao();
+        UserDaoJdbc dao2 = factory.userDao();
 
         System.out.println(dao1);
         System.out.println(dao2);
@@ -43,8 +43,8 @@ public class DaoFactoryTest {
         ApplicationContext context = new
                 AnnotationConfigApplicationContext(DaoFactory.class);
 
-        UserDao dao3 = context.getBean("userDao", UserDao.class);
-        UserDao dao4 = context.getBean("userDao", UserDao.class);
+        UserDaoJdbc dao3 = context.getBean("userDao", UserDaoJdbc.class);
+        UserDaoJdbc dao4 = context.getBean("userDao", UserDaoJdbc.class);
 
         System.out.println(dao3);
         System.out.println(dao4);

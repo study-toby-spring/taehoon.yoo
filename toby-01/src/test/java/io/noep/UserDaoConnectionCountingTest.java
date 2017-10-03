@@ -2,7 +2,7 @@ package io.noep;
 
 import io.noep.dao.connection.CountingConnectionMaker;
 import io.noep.dao.factory.CountingDaoFactory;
-import io.noep.dao.UserDao;
+import io.noep.dao.UserDaoJdbc;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -30,7 +30,7 @@ public class UserDaoConnectionCountingTest {
     public void test() throws SQLException, ClassNotFoundException {
         AnnotationConfigApplicationContext context =
         new AnnotationConfigApplicationContext(CountingDaoFactory.class);
-        UserDao dao = context.getBean("userDao", UserDao.class);
+        UserDaoJdbc dao = context.getBean("userDao", UserDaoJdbc.class);
 
         CountingConnectionMaker ccm = context.getBean("connectionMaker", CountingConnectionMaker.class);
         System.out.println("Connection counter : " + ccm.getCounter());
@@ -50,7 +50,7 @@ public class UserDaoConnectionCountingTest {
         ApplicationContext context =
                 new GenericXmlApplicationContext("application-context.xml");
 
-        UserDao dao = context.getBean("userDao", UserDao.class);
+        UserDaoJdbc dao = context.getBean("userDao", UserDaoJdbc.class);
         System.out.println(dao.get("whiteship").toString());
     }
 }
