@@ -36,8 +36,7 @@ public class UserDao {
      */
     public void add(User user) throws SQLException {
 
-        this.jdbcContext.workWithStatementStrategy(
-            c -> {
+        this.jdbcContext.workWithStatementStrategy(c -> {
                 PreparedStatement ps =
                         c.prepareStatement("insert into users(id,name,password) " +
                                 "values (?,?,?)");
@@ -48,6 +47,10 @@ public class UserDao {
                 return ps;
             }
         );
+    }
+
+    public void deleteAll() throws SQLException {
+        this.jdbcContext.executeSql("delete from users");
     }
 
     public User get(String id) throws SQLException {
@@ -74,12 +77,6 @@ public class UserDao {
         if (user == null) throw new EmptyResultDataAccessException(1);
 
         return user;
-    }
-
-    public void deleteAll() throws SQLException {
-        this.jdbcContext.workWithStatementStrategy(
-            c -> c.prepareStatement("delete from users")
-        );
     }
 
     public int getCount() throws SQLException {
