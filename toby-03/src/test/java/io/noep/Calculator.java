@@ -17,7 +17,7 @@ public class Calculator {
 
     public Integer calcSum(String filePath) throws IOException {
 
-        LineCallback sumCallback = (line, value) -> value + Integer.valueOf(line);
+        LineCallback<Integer> sumCallback = (line, value) -> value + Integer.valueOf(line);
         return lineReadTemplate(filePath, sumCallback, 0);
     }
 
@@ -25,12 +25,19 @@ public class Calculator {
         return lineReadTemplate(filePath, (line, value) -> value * Integer.valueOf(line), 1);
     }
 
-    public Integer lineReadTemplate(String filePath, LineCallback callback, int initVal) throws IOException {
+    public String concatenate(String filePath) throws IOException {
+        LineCallback<String> concatenateCallback = ((line, value) -> {
+            return value + line;
+        });
+        return lineReadTemplate(filePath, concatenateCallback, "");
+    }
+
+    public <T> T lineReadTemplate(String filePath, LineCallback<T> callback, T initVal) throws IOException {
         BufferedReader br = null;
 
         try {
             br = new BufferedReader(new FileReader(filePath));
-            Integer res = initVal;
+            T res = initVal;
             String line = null;
 
             while ((line = br.readLine()) != null) {
