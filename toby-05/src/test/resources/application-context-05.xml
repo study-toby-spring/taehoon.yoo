@@ -21,5 +21,11 @@
 
     <bean id="userService" class="io.noep.service.UserService">
         <property name="userDao" ref="userDao"/>
+        <property name="userLevelUpgradePolicy" ref="userLevelUpgradePolicy"/>
     </bean>
+
+    <bean id="userLevelUpgradePolicy" class="io.noep.service.StandardUserLevelUpgradePolicy">
+            <property name="userDao" ref="userDao"/>
+    </bean>
+
 </beans>
