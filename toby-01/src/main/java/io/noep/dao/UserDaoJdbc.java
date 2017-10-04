@@ -1,5 +1,6 @@
 package io.noep.dao;
 
+import io.noep.domain.Level;
 import io.noep.domain.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -24,6 +25,9 @@ public class UserDaoJdbc implements UserDao {
         user.setId(resultSet.getString("id"));
         user.setName(resultSet.getString("name"));
         user.setPassword(resultSet.getString("password"));
+        user.setLevel(Level.valueOf(resultSet.getInt("level")));
+        user.setLogin(resultSet.getInt("login"));
+        user.setRecommend(resultSet.getInt("recommend"));
         return user;
     };
 
@@ -41,8 +45,8 @@ public class UserDaoJdbc implements UserDao {
      */
     public void add(User user) {
 
-        this.jdbcTemplate.update("insert into users(id,name,password) values (?,?,?)",
-                user.getId(), user.getName(), user.getPassword());
+        this.jdbcTemplate.update("insert into users(id, name, password, level, login, recommend ) values (?,?,?,?,?,?)",
+                user.getId(), user.getName(), user.getPassword(), user.getLevel().intValue(), user.getLogin(), user.getRecommend());
     }
 
     public void deleteAll() {
@@ -64,6 +68,15 @@ public class UserDaoJdbc implements UserDao {
                 });
     }
 
+    public void update(User user) {
+        this.jdbcTemplate.update(
+                "update users set name = ?, password = ?, " +
+                        "level = ?, login = ?, recommend = ? where id = ? ",
+                user.getName(), user.getPassword(),
+                user.getLevel().intValue(), user.getLogin(), user.getRecommend(),
+                user.getId());
+
+    }
 
     public List<User> getAll() {
         return this.jdbcTemplate.query("select * from users order by id", userMapper);

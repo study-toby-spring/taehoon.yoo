@@ -1,6 +1,7 @@
 package io.noep;
 
 import io.noep.dao.UserDao;
+import io.noep.domain.Level;
 import io.noep.domain.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +22,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.isA;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -61,9 +61,9 @@ public class UserDaoTest {
         System.out.println(this.context);
         System.out.println(this);
 
-        this.user1 = new User("gyumee", "박성철", "springno1");
-        this.user2 = new User("orange", "오렌지", "ihaveanorange");
-        this.user3 = new User("pineapple", "파인애플", "ihaveapineapple");
+        this.user1 = new User("gyumee", "박성철", "springno1", Level.BASIC, 1, 0);
+        this.user2 = new User("orange", "오렌지", "ihaveanorange", Level.SILVER, 55, 10);
+        this.user3 = new User("pineapple", "파인애플", "ihaveapineapple", Level.GOLD, 100, 40);
 
     }
 
@@ -166,10 +166,34 @@ public class UserDaoTest {
 
     }
 
+    @Test
+    public void update() {
+        userDao.deleteAll();
+
+        userDao.add(user1);
+        userDao.add(user2);
+
+        user1.setName("오민규");
+        user1.setPassword("springno6");
+        user1.setLevel(Level.GOLD);
+        user1.setRecommend(999);
+
+        userDao.update(user1);
+
+        User user1update = userDao.get(user1.getId());
+        checkSameUser(user1, user1update);
+
+        User user2same = userDao.get(user2.getId());
+        checkSameUser(user2, user2same);
+    }
+
     private void checkSameUser(User user1, User user2) {
         assertThat(user1.getId(), is(user2.getId()));
         assertThat(user1.getName(), is(user2.getName()));
         assertThat(user1.getPassword(), is(user2.getPassword()));
+        assertThat(user1.getLevel(), is(user2.getLevel()));
+        assertThat(user1.getLogin(), is(user2.getLogin()));
+        assertThat(user1.getRecommend(), is(user2.getRecommend()));
     }
 
 
