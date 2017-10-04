@@ -55,7 +55,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void upgradeLevels() {
+    public void upgradeLevels() throws IllegalAccessException {
         userDao.deleteAll();
         for (User user : users) {
             userDao.add(user);
