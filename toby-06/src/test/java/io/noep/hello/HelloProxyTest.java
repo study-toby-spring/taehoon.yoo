@@ -1,4 +1,4 @@
-package io.noep;
+package io.noep.hello;
 
 import org.junit.Test;
 

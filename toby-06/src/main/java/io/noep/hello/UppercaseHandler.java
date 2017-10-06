@@ -1,4 +1,4 @@
-package io.noep;
+package io.noep.hello;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

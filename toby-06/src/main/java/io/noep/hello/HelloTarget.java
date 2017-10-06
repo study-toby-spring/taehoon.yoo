@@ -1,4 +1,4 @@
-package io.noep;
+package io.noep.hello;
 
 /**
  * Created by Taehoon Yoo
