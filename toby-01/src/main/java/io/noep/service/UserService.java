@@ -3,15 +3,11 @@ package io.noep.service;
 import io.noep.dao.UserDao;
 import io.noep.domain.Level;
 import io.noep.domain.User;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -27,6 +23,7 @@ public class UserService {
 
     private UserDao userDao;
     private DataSource dataSource;
+    private PlatformTransactionManager transactionManager;
 
     public static final int MIN_LOGCOUNT_FOR_SILVER = 50;
     public static final int MIN_LOGCOUNT_FOR_GOLD = 30;
@@ -39,11 +36,13 @@ public class UserService {
         this.dataSource = dataSource;
     }
 
+    public void setTransactionManager(PlatformTransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
+    }
+
     public void upgradeLevels() throws Exception {
-        PlatformTransactionManager transactionManager
-                = new DataSourceTransactionManager(dataSource);
         TransactionStatus status =
-                transactionManager.getTransaction(new DefaultTransactionDefinition());
+                this.transactionManager.getTransaction(new DefaultTransactionDefinition());
 
         try {
             List<User> users = userDao.getAll();
@@ -54,9 +53,9 @@ public class UserService {
                 }
             }
 
-            transactionManager.commit(status);
+            this.transactionManager.commit(status);
         } catch (Exception e) {
-            transactionManager.rollback(status);
+            this.transactionManager.rollback(status);
             throw e;
         }
     }
