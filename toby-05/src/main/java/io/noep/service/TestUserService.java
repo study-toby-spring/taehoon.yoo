@@ -11,7 +11,7 @@ import io.noep.domain.User;
  * Email : noep@naver.com
  * Desc  :
  */
-public class TestUserService extends UserService {
+public class TestUserService extends UserServiceImpl {
     private String id;
 
     public TestUserService(String id) {
