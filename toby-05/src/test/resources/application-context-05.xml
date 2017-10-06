@@ -19,9 +19,11 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
-    <bean id="userService" class="io.noep.service.UserServiceTx">
+    <bean id="userService" class="io.noep.service.TxProxyFactoryBean">
+        <property name="target" ref="userServiceImpl"/>
         <property name="transactionManager" ref="transactionManager"/>
-        <property name="userService" ref="userServiceImpl"/>
+        <property name="pattern" value="upgradeLevels"/>
+        <property name="serviceInterface" value="io.noep.service.UserService"/>
     </bean>
 
     <bean id="userServiceImpl" class="io.noep.service.UserServiceImpl">
