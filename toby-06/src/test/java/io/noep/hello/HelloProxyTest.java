@@ -1,6 +1,11 @@
 package io.noep.hello;
 
+import org.aopalliance.intercept.MethodInterceptor;
+import org.aopalliance.intercept.MethodInvocation;
 import org.junit.Test;
+import org.springframework.aop.framework.ProxyFactoryBean;
+import org.springframework.aop.support.DefaultPointcutAdvisor;
+import org.springframework.aop.support.NameMatchMethodPointcut;
 
 import java.lang.reflect.Proxy;
 
@@ -29,10 +34,7 @@ public class HelloProxyTest {
     @Test
     public void proxiedHello() {
         Hello proxiedHello = new HelloUppercase(new HelloTarget());
-
-        assertThat(proxiedHello.sayHello("Toby"), is("HELLO TOBY"));
-        assertThat(proxiedHello.sayHi("Toby"), is("HI TOBY"));
-        assertThat(proxiedHello.sayThankYou("Toby"), is("THANK YOU TOBY"));
+        assertHelloProxy(proxiedHello);
     }
 
     @Test
@@ -41,10 +43,50 @@ public class HelloProxyTest {
                 getClass().getClassLoader(),
                 new Class[]{Hello.class},
                 new UppercaseHandler(new HelloTarget()));
+        assertHelloProxy(proxiedHello);
+    }
 
+    @Test
+    public void proxyFactoryBean() {
+        ProxyFactoryBean pfBean = new ProxyFactoryBean();
+        pfBean.setTarget(new HelloTarget());
+        pfBean.addAdvice(new UppercaseAdvice());
+
+        Hello proxiedHello = (Hello) pfBean.getObject();
+
+        assertHelloProxy(proxiedHello);
+    }
+
+    @Test
+    public void pointcutAdvisor() {
+        ProxyFactoryBean pfBean = new ProxyFactoryBean();
+        pfBean.setTarget(new HelloTarget());
+
+        NameMatchMethodPointcut pointcut = new NameMatchMethodPointcut();
+        pointcut.setMappedName("sayH*");
+
+        pfBean.addAdvisor(new DefaultPointcutAdvisor(pointcut, new UppercaseAdvice()));
+
+        Hello proxiedHello = (Hello) pfBean.getObject();
+
+        assertThat(proxiedHello.sayHello("Toby"), is("HELLO TOBY"));
+        assertThat(proxiedHello.sayHi("Toby"), is("HI TOBY"));
+        assertThat(proxiedHello.sayThankYou("Toby"), is("Thank You Toby"));
+    }
+
+    private void assertHelloProxy(Hello proxiedHello) {
         assertThat(proxiedHello.sayHello("Toby"), is("HELLO TOBY"));
         assertThat(proxiedHello.sayHi("Toby"), is("HI TOBY"));
         assertThat(proxiedHello.sayThankYou("Toby"), is("THANK YOU TOBY"));
 
+    }
+
+    static class UppercaseAdvice implements MethodInterceptor {
+
+        @Override
+        public Object invoke(MethodInvocation methodInvocation) throws Throwable {
+            String ret = (String) methodInvocation.proceed();
+            return ret.toUpperCase();
+        }
     }
 }
