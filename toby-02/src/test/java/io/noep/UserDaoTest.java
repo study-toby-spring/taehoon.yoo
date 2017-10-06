@@ -61,9 +61,9 @@ public class UserDaoTest {
         System.out.println(this.context);
         System.out.println(this);
 
-        this.user1 = new User("gyumee", "박성철", "springno1", Level.BASIC, 1, 0);
-        this.user2 = new User("orange", "오렌지", "ihaveanorange", Level.SILVER, 55, 10);
-        this.user3 = new User("pineapple", "파인애플", "ihaveapineapple", Level.GOLD, 100, 40);
+        this.user1 = new User("gyumee", "박성철", "springno1", Level.BASIC, 1, 0, "a@b.c");
+        this.user2 = new User("orange", "오렌지", "ihaveanorange", Level.SILVER, 55, 10,"d@e.f");
+        this.user3 = new User("pineapple", "파인애플", "ihaveapineapple", Level.GOLD, 100, 40, "g@h.i");
 
     }
 
@@ -194,6 +194,7 @@ public class UserDaoTest {
         assertThat(user1.getLevel(), is(user2.getLevel()));
         assertThat(user1.getLogin(), is(user2.getLogin()));
         assertThat(user1.getRecommend(), is(user2.getRecommend()));
+        assertThat(user1.getEmail(), is(user2.getEmail()));
     }
 
 
