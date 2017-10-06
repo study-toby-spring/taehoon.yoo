@@ -1,4 +1,4 @@
-package io.noep.service;
+package io.noep.proxy;
 
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;

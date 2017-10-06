@@ -1,4 +1,4 @@
-package io.noep.service;
+package io.noep.proxy;
 
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
