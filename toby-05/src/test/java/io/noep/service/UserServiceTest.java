@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
+import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class UserServiceTest {
     UserService userService;
 
     @Autowired
-    UserServiceImpl userServiceImpl;
+    UserService testUserService;
 
     @Autowired
     ApplicationContext context;
@@ -156,30 +157,24 @@ public class UserServiceTest {
 
 
     @Test
-    @DirtiesContext
     public void upgradeAllOrNothing() throws Exception {
-        TestUserService testUserService = new TestUserService(users.get(3).getId());
-        testUserService.setUserDao(this.userDao);
-        testUserService.setMailSender(mailSender);
-
-        ProxyFactoryBean txProxyFactoryBean =
-                context.getBean("&userService", ProxyFactoryBean.class);
-        txProxyFactoryBean.setTarget(testUserService);
-        UserService txUserService = (UserService) txProxyFactoryBean.getObject();
-
-
         userDao.deleteAll();
 
         for(User user : users) userDao.add(user);
 
         try {
-            txUserService.upgradeLevels();
+            this.testUserService.upgradeLevels();
             fail("TestUserServiceException expected");
-        } catch (TestUserService.TestUserServiceException e) {
+        } catch (TestUserServiceImpl.TestUserServiceException e) {
 
         }
 
         checkLevelUpgraded(users.get(1), false);
+    }
+
+    @Test
+    public void advisorAutoProxyCreator() {
+        assertThat(testUserService instanceof Proxy, is(true));
     }
 
     private void checkLevelUpgraded(User user, boolean upgraded) {

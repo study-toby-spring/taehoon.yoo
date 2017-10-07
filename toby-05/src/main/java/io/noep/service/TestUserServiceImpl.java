@@ -11,10 +11,12 @@ import io.noep.domain.User;
  * Email : noep@naver.com
  * Desc  :
  */
-public class TestUserService extends UserServiceImpl {
-    private String id;
+public class TestUserServiceImpl extends UserServiceImpl {
+    private String id = "madnite1";
 
-    public TestUserService(String id) {
+    public TestUserServiceImpl() {}
+
+    public TestUserServiceImpl(String id) {
         this.id = id;
     }
 
