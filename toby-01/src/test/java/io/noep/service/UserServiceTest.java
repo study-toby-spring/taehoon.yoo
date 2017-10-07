@@ -15,11 +15,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import javax.sql.DataSource;
 import java.lang.reflect.Proxy;
@@ -134,26 +131,26 @@ public class UserServiceTest {
     public void mockUpgradeLevels() throws Exception {
         UserServiceImpl userServiceImpl = new UserServiceImpl();
 
-        UserDao mockUserDao = mock(UserDao.class);
-        when(mockUserDao.getAll()).thenReturn(this.users);
+        UserDao mockUserDao = Mockito.mock(UserDao.class);
+        Mockito.when(mockUserDao.getAll()).thenReturn(this.users);
         userServiceImpl.setUserDao(mockUserDao);
 
-        MailSender mockMailSender = mock(MailSender.class);
+        MailSender mockMailSender = Mockito.mock(MailSender.class);
         userServiceImpl.setMailSender(mockMailSender);
 
         userServiceImpl.upgradeLevels();
 
-        verify(mockUserDao, times(2)).update(any(User.class));
-        verify(mockUserDao, times(2)).update(any(User.class));
-        verify(mockUserDao).update(users.get(1));
+        Mockito.verify(mockUserDao, Mockito.times(2)).update(ArgumentMatchers.any(User.class));
+        Mockito.verify(mockUserDao, Mockito.times(2)).update(ArgumentMatchers.any(User.class));
+        Mockito.verify(mockUserDao).update(users.get(1));
 
         assertThat(users.get(1).getLevel(), is(Level.SILVER));
-        verify(mockUserDao).update(users.get(3));
+        Mockito.verify(mockUserDao).update(users.get(3));
         assertThat(users.get(3).getLevel(), is(Level.GOLD));
 
         ArgumentCaptor<SimpleMailMessage> mailMessageArg =
                 ArgumentCaptor.forClass(SimpleMailMessage.class);
-        verify(mockMailSender, times(2)).send(mailMessageArg.capture());
+        Mockito.verify(mockMailSender, Mockito.times(2)).send(mailMessageArg.capture());
         List<SimpleMailMessage> mailMessages = mailMessageArg.getAllValues();
         assertThat(mailMessages.get(0).getTo()[0], is(users.get(1).getEmail()));
         assertThat(mailMessages.get(1).getTo()[0], is(users.get(3).getEmail()));

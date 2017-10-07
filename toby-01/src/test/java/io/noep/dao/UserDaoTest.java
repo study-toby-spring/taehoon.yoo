@@ -1,4 +1,4 @@
-package io.noep;
+package io.noep.dao;
 
 import io.noep.dao.UserDao;
 import io.noep.dao.factory.DaoFactory;

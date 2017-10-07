@@ -1,4 +1,4 @@
-package io.noep;
+package io.noep.dao;
 
 import io.noep.dao.connection.CountingConnectionMaker;
 import io.noep.dao.factory.CountingDaoFactory;
@@ -48,7 +48,7 @@ public class UserDaoConnectionCountingTest {
     @Test
     public void test2() throws SQLException, ClassNotFoundException {
         ApplicationContext context =
-                new GenericXmlApplicationContext("application-context.xml");
+                new GenericXmlApplicationContext("application-context-01.xml");
 
         UserDaoJdbc dao = context.getBean("userDao", UserDaoJdbc.class);
         System.out.println(dao.get("whiteship").toString());

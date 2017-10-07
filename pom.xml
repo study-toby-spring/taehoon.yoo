@@ -13,10 +13,10 @@
         <module>spring-bean-test</module>
         <module>toby-01</module>
         <module>toby-02</module>
-        <module>toby-03</module>
+        <module>toby-03-template</module>
         <module>toby-04</module>
         <module>toby-05</module>
-        <module>toby-06</module>
+        <module>toby-06-aop</module>
     </modules>
 
 

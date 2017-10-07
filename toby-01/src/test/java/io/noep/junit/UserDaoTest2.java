@@ -1,4 +1,4 @@
-package io.noep;
+package io.noep.junit;
 
 import io.noep.dao.UserDao;
 import io.noep.domain.Level;
@@ -34,8 +34,8 @@ import static org.junit.Assert.assertThat;
  * Desc  :
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/applicationContext.xml")
-public class UserDaoTest {
+@ContextConfiguration(locations = "/applicationContext-02.xml")
+public class UserDaoTest2 {
 
     @Autowired
     private ApplicationContext context;

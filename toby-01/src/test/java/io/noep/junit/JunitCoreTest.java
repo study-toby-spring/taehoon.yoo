@@ -1,4 +1,4 @@
-package io.noep;
+package io.noep.junit;
 
 import org.junit.runner.JUnitCore;
 
@@ -14,6 +14,6 @@ import org.junit.runner.JUnitCore;
 public class JunitCoreTest {
 
     public static void main (String[] args) {
-        JUnitCore.main("io.noep.UserDaoTest");
+        JUnitCore.main("io.noep.junit.UserDaoTest2");
     }
 }

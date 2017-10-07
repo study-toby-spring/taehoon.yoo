@@ -11,11 +11,4 @@
 
     <artifactId>toby-04</artifactId>
 
-    <dependencies>
-        <dependency>
-            <groupId>io.noep</groupId>
-            <artifactId>toby-03</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
 </project>

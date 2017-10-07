@@ -1,4 +1,4 @@
-package io.noep;
+package io.noep.junit;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
