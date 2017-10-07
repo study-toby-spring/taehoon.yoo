@@ -5,6 +5,7 @@ import io.noep.domain.Level;
 import io.noep.domain.User;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
  * Email : noep@naver.com
  * Desc  :
  */
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private UserDao userDao;

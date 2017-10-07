@@ -61,6 +61,7 @@
     </aop:config>
 
     <!--Transaction Advice-->
+    <tx:annotation-driven/>
     <tx:advice id="transactionAdvice">
         <tx:attributes>
             <tx:method name="get*" propagation="REQUIRED" read-only="true" timeout="30"/>
