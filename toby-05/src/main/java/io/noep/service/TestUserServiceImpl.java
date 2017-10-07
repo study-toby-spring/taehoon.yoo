@@ -2,6 +2,8 @@ package io.noep.service;
 
 import io.noep.domain.User;
 
+import java.util.List;
+
 /**
  * Created by Taehoon Yoo
  * User  : taehoon
@@ -25,6 +27,14 @@ public class TestUserServiceImpl extends UserServiceImpl {
         if(user.getId().equals(this.id)) throw new TestUserServiceException();
         super.upgradeLevel(user);
 
+    }
+
+    @Override
+    public List<User> getAll() {
+        for(User user : super.getAll()) {
+            super.update(user);
+        }
+        return null;
     }
 
     static class TestUserServiceException extends RuntimeException{

@@ -3,12 +3,12 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/aop
-                           http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+                           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
                            http://www.springframework.org/schema/tx
-                           http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
-">
+                           http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
     <bean id="connectionMaker" class="io.noep.dao.connection.DConnectionMaker"/>
     <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
@@ -26,6 +26,11 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
+    <bean id="userService" class="io.noep.service.UserServiceImpl">
+        <property name="userDao" ref="userDao"/>
+        <property name="mailSender" ref="mailSender"/>
+    </bean>
+
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>
@@ -35,20 +40,8 @@
         <property name="host" value="mail.server.com"/>
     </bean>
 
-    <bean id="userService" class="io.noep.service.UserServiceImpl">
-        <property name="userDao" ref="userDao"/>
-        <property name="mailSender" ref="mailSender"/>
-    </bean>
-
-    <bean id="testUserService" class="io.noep.service.TestUserServiceImpl" parent="userService"/>
-
-    <!--AOP-->
-
-    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
-
-    <bean id="transactionPointcut" class="io.noep.proxy.NameMatchClassMethodPointCut">
-        <property name="mappedClassName" value="*ServiceImpl"/>
-        <property name="mappedName" value="upgrade*"/>
+    <bean id="transactionPointcut" class="org.springframework.aop.aspectj.AspectJExpressionPointcut">
+        <property name="expression" value="execution(* *..*ServiceImpl.upgrade*(..))"/>
     </bean>
 
     <bean id="transactionAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
@@ -56,11 +49,13 @@
         <property name="pointcut" ref="transactionPointcut"/>
     </bean>
 
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+    <bean id="testUserService" class="io.noep.service.TestUserServiceImpl" parent="userService"/>
+
     <aop:config>
         <aop:advisor advice-ref="transactionAdvice" pointcut="bean(*Service)"/>
     </aop:config>
 
-    <!--Transaction Advice-->
     <tx:advice id="transactionAdvice">
         <tx:attributes>
             <tx:method name="get*" propagation="REQUIRED" read-only="true" timeout="30"/>
@@ -69,4 +64,6 @@
         </tx:attributes>
     </tx:advice>
 
+
 </beans>
+

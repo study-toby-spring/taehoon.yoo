@@ -7,12 +7,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.dao.TransientDataAccessResourceException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -69,9 +68,9 @@ public class UserServiceTest {
     @Before
     public void setup() {
         users = Arrays.asList(
-                new User("bumjin", "박범진", "p1", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER -1, 0, "a@b.c"),
+                new User("bumjin", "박범진", "p1", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER - 1, 0, "a@b.c"),
                 new User("joytouch", "강명성", "p2", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER, 0, "d@e.f"),
-                new User("erwins", "신승한", "p3", Level.SILVER, 60, MIN_LOGCOUNT_FOR_GOLD -1, "g@h.i"),
+                new User("erwins", "신승한", "p3", Level.SILVER, 60, MIN_LOGCOUNT_FOR_GOLD - 1, "g@h.i"),
                 new User("madnite1", "이상호", "p4", Level.SILVER, 60, MIN_LOGCOUNT_FOR_GOLD, "j@k.l"),
                 new User("green", "오민규", "p5", Level.GOLD, 100, Integer.MAX_VALUE, "m@n.o")
         );
@@ -160,7 +159,7 @@ public class UserServiceTest {
     public void upgradeAllOrNothing() throws Exception {
         userDao.deleteAll();
 
-        for(User user : users) userDao.add(user);
+        for (User user : users) userDao.add(user);
 
         try {
             this.testUserService.upgradeLevels();
@@ -175,6 +174,11 @@ public class UserServiceTest {
     @Test
     public void advisorAutoProxyCreator() {
         assertThat(testUserService instanceof Proxy, is(true));
+    }
+
+    @Test(expected = TransientDataAccessResourceException.class)
+    public void readOnlyTransactionAttribute() {
+        testUserService.getAll();
     }
 
     private void checkLevelUpgraded(User user, boolean upgraded) {
