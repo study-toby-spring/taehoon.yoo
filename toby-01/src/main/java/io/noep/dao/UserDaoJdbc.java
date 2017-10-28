@@ -2,6 +2,7 @@ package io.noep.dao;
 
 import io.noep.domain.Level;
 import io.noep.domain.User;
+import io.noep.service.sqlservice.SqlService;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -21,7 +22,7 @@ import java.util.Map;
  */
 public class UserDaoJdbc implements UserDao {
 
-    private Map<String, String> sqlMap;
+    private SqlService sqlService;
 
     private RowMapper<User> userMapper = (resultSet, i) -> {
         User user = new User();
@@ -41,8 +42,8 @@ public class UserDaoJdbc implements UserDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public void setSqlMap(Map<String, String> sqlMap) {
-        this.sqlMap = sqlMap;
+    public void setSqlService(SqlService sqlService) {
+        this.sqlService = sqlService;
     }
 
     /**
@@ -53,23 +54,23 @@ public class UserDaoJdbc implements UserDao {
      */
     public void add(User user) {
 
-        this.jdbcTemplate.update(sqlMap.get("add"),
+        this.jdbcTemplate.update(this.sqlService.getSql("add"),
                 user.getId(), user.getName(), user.getPassword(), user.getLevel().intValue(), user.getLogin(), user.getRecommend(), user.getEmail());
     }
 
     public void deleteAll() {
-        this.jdbcTemplate.update(sqlMap.get("deleteAll"));
+        this.jdbcTemplate.update(this.sqlService.getSql("deleteAll"));
     }
 
     public User get(String id) {
 
-        return this.jdbcTemplate.queryForObject(sqlMap.get("get"),
+        return this.jdbcTemplate.queryForObject(this.sqlService.getSql("get"),
                 new Object[]{id}, userMapper);
     }
 
     public int getCount() {
         return this.jdbcTemplate.query(
-                sqlMap.get("getCount") ,
+                this.sqlService.getSql("getCount") ,
                 resultSet -> {
                     resultSet.next();
                     return resultSet.getInt(1);
@@ -78,7 +79,7 @@ public class UserDaoJdbc implements UserDao {
 
     public void update(User user) {
         this.jdbcTemplate.update(
-                sqlMap.get("update")
+                this.sqlService.getSql("update")
                 ,
                 user.getName(), user.getPassword(),
                 user.getLevel().intValue(), user.getLogin(), user.getRecommend(), user.getEmail(),
@@ -87,6 +88,6 @@ public class UserDaoJdbc implements UserDao {
     }
 
     public List<User> getAll() {
-        return this.jdbcTemplate.query(sqlMap.get("getAll"), userMapper);
+        return this.jdbcTemplate.query(this.sqlService.getSql("getAll"), userMapper);
     }
 }

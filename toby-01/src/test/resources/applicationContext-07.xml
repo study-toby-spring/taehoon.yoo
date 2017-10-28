@@ -17,6 +17,10 @@
 
     <bean id="userDao" class="io.noep.dao.UserDaoJdbc">
         <property name="dataSource" ref="dataSource"/>
+        <property name="sqlService" ref="sqlService"/>
+    </bean>
+
+    <bean id="sqlService" class="io.noep.service.sqlservice.SimpleSqlService">
         <property name="sqlMap">
             <map>
                 <entry key="add"
