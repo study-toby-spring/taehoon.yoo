@@ -20,6 +20,8 @@ import java.util.List;
  */
 public class UserDaoJdbc implements UserDao {
 
+    private String sqlAdd;
+
     private RowMapper<User> userMapper = (resultSet, i) -> {
         User user = new User();
         user.setId(resultSet.getString("id"));
@@ -38,6 +40,10 @@ public class UserDaoJdbc implements UserDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    public void setSqlAdd(String sqlAdd) {
+        this.sqlAdd = sqlAdd;
+    }
+
     /**
      * 로컬 클래스를 만들어서 클래스 수를 줄인다
      *
@@ -46,7 +52,7 @@ public class UserDaoJdbc implements UserDao {
      */
     public void add(User user) {
 
-        this.jdbcTemplate.update("insert into users(id, name, password, level, login, recommend, email ) values (?,?,?,?,?,?,?)",
+        this.jdbcTemplate.update(sqlAdd,
                 user.getId(), user.getName(), user.getPassword(), user.getLevel().intValue(), user.getLogin(), user.getRecommend(), user.getEmail());
     }
 
