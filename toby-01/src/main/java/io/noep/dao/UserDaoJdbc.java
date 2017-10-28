@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Taehoon Yoo
@@ -20,7 +21,7 @@ import java.util.List;
  */
 public class UserDaoJdbc implements UserDao {
 
-    private String sqlAdd;
+    private Map<String, String> sqlMap;
 
     private RowMapper<User> userMapper = (resultSet, i) -> {
         User user = new User();
@@ -40,8 +41,8 @@ public class UserDaoJdbc implements UserDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public void setSqlAdd(String sqlAdd) {
-        this.sqlAdd = sqlAdd;
+    public void setSqlMap(Map<String, String> sqlMap) {
+        this.sqlMap = sqlMap;
     }
 
     /**
@@ -52,23 +53,23 @@ public class UserDaoJdbc implements UserDao {
      */
     public void add(User user) {
 
-        this.jdbcTemplate.update(sqlAdd,
+        this.jdbcTemplate.update(sqlMap.get("add"),
                 user.getId(), user.getName(), user.getPassword(), user.getLevel().intValue(), user.getLogin(), user.getRecommend(), user.getEmail());
     }
 
     public void deleteAll() {
-        this.jdbcTemplate.update("delete from users");
+        this.jdbcTemplate.update(sqlMap.get("deleteAll"));
     }
 
     public User get(String id) {
 
-        return this.jdbcTemplate.queryForObject("select * from users where id = ?",
+        return this.jdbcTemplate.queryForObject(sqlMap.get("get"),
                 new Object[]{id}, userMapper);
     }
 
     public int getCount() {
         return this.jdbcTemplate.query(
-                "select count(*) from users",
+                sqlMap.get("getCount") ,
                 resultSet -> {
                     resultSet.next();
                     return resultSet.getInt(1);
@@ -77,8 +78,8 @@ public class UserDaoJdbc implements UserDao {
 
     public void update(User user) {
         this.jdbcTemplate.update(
-                "update users set name = ?, password = ?, " +
-                        "level = ?, login = ?, recommend = ?, email = ? where id = ? ",
+                sqlMap.get("update")
+                ,
                 user.getName(), user.getPassword(),
                 user.getLevel().intValue(), user.getLogin(), user.getRecommend(), user.getEmail(),
                 user.getId());
@@ -86,6 +87,6 @@ public class UserDaoJdbc implements UserDao {
     }
 
     public List<User> getAll() {
-        return this.jdbcTemplate.query("select * from users order by id", userMapper);
+        return this.jdbcTemplate.query(sqlMap.get("getAll"), userMapper);
     }
 }
