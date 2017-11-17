@@ -31,6 +31,8 @@ public class JaxbTest {
 
         Unmarshaller unmarshaller = context.createUnmarshaller();
 
+        //resource 의 위치를 패키지와 동일하게 맞춰주어야 한다
+        // reoucres/io/noep/jaxb/sqlmap.xml
         Sqlmap sqlmap = (Sqlmap) unmarshaller.unmarshal(
                 getClass().getResourceAsStream("sqlmap.xml"));
 

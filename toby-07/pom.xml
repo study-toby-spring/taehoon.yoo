@@ -13,10 +13,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>javax.xml.bind </groupId>
-            <artifactId></artifactId>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
