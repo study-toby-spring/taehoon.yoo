@@ -4,6 +4,7 @@ import io.noep.dao.UserDao;
 import io.noep.jaxb.SqlType;
 import io.noep.jaxb.Sqlmap;
 
+import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -23,14 +24,23 @@ import java.util.Map;
 public class XmlSqlService implements SqlService {
 
     private Map<String, String> sqlMap = new HashMap<>();
+    private String sqlMapFile;
+
+    public void setSqlMapFile(String sqlMapFile) {
+        this.sqlMapFile = sqlMapFile;
+    }
 
     public XmlSqlService() {
+    }
+
+    @PostConstruct
+    public void loadSql() {
         String contextPath = Sqlmap.class.getPackage().getName();
 
         try {
             JAXBContext context = JAXBContext.newInstance(contextPath);
             Unmarshaller unmarshaller = context.createUnmarshaller();
-            InputStream is = UserDao.class.getResourceAsStream("sqlmap.xml");
+            InputStream is = UserDao.class.getResourceAsStream(this.sqlMapFile);
             Sqlmap sqlmap = (Sqlmap) unmarshaller.unmarshal(is);
 
             for(SqlType sql : sqlmap.getSql()) {
