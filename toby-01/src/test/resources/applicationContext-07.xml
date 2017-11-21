@@ -24,11 +24,28 @@
         <property name="sqlService" ref="sqlService"/>
     </bean>
 
-    <bean id="sqlService" class="io.noep.service.sqlservice.XmlSqlService">
-        <property name="sqlReader" ref="sqlService"/>
-        <property name="sqlRegistry" ref="sqlService"/>
-        <property name="sqlMapFile" value="sqlmap.xml"/>
-    </bean>
+    <!--1번-->
+    <!--<bean id="sqlService" class="io.noep.service.sqlservice.XmlSqlService">-->
+        <!--<property name="sqlReader" ref="sqlService"/>-->
+        <!--<property name="sqlRegistry" ref="sqlService"/>-->
+        <!--<property name="sqlMapFile" value="sqlmap.xml"/>-->
+    <!--</bean>-->
+
+    <!--2번-->
+    <!--<bean id="sqlService" class="io.noep.service.sqlservice.BaseSqlService">-->
+        <!--<property name="sqlReader" ref="sqlReader"/>-->
+        <!--<property name="sqlRegistry" ref="sqlRegistry"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="sqlReader" class="io.noep.service.sqlservice.JaxbXmlSqlReader">-->
+        <!--<property name="sqlMapFile" value="sqlmap.xml"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="sqlRegistry" class="io.noep.service.sqlservice.HashMapSqlRegistry">-->
+    <!--</bean>-->
+
+    <!--3번-->
+    <bean id="sqlService" class="io.noep.service.sqlservice.DefaultSqlService"/>
 
     <context:annotation-config/>
 </beans>

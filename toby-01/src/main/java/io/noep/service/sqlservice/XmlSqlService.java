@@ -90,6 +90,5 @@ public class XmlSqlService implements SqlService, SqlRegistry, SqlReader {
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
-
     }
 }
