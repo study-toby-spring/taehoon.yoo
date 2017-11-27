@@ -47,5 +47,10 @@
     <!--3번-->
     <bean id="sqlService" class="io.noep.service.sqlservice.DefaultSqlService"/>
 
+    <bean id="unmarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+        <property name="contextPath" value="io.noep.service.sqlservice.jaxb"/>
+    </bean>
+
+
     <context:annotation-config/>
 </beans>

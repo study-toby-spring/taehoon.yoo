@@ -1,7 +1,7 @@
 package io.noep.jaxb;
 
-import io.noep.SqlType;
-import io.noep.Sqlmap;
+import io.noep.jaxb.SqlType;
+import io.noep.jaxb.Sqlmap;
 import org.junit.Test;
 
 import javax.xml.bind.JAXBContext;

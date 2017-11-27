@@ -6,7 +6,7 @@
 //
 
 
-package io.noep;
+package io.noep.jaxb;
 
 import java.util.ArrayList;
 import java.util.List;
