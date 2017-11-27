@@ -52,15 +52,28 @@
     <!--</bean>-->
 
     <!--7.3.2 OXM 서비스 추상화 적용-->
+    <!--<bean id="sqlService" class="io.noep.service.sqlservice.OxmSqlService">-->
+        <!--<property name="unmarshaller" ref="unmarshaller"/>-->
+        <!--이거 왜 코드 책에 없지 내가 잘못했나-->
+        <!--<property name="sqlmapFile" value="sqlmap.xml"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="unmarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">-->
+        <!--<property name="contextPath" value="io.noep.jaxb"/>-->
+    <!--</bean>-->
+
+    <!--7.3.4 OXM 서비스 추상화 적용-->
     <bean id="sqlService" class="io.noep.service.sqlservice.OxmSqlService">
         <property name="unmarshaller" ref="unmarshaller"/>
         <!--이거 왜 코드 책에 없지 내가 잘못했나-->
-        <property name="sqlmapFile" value="sqlmap.xml"/>
+        <property name="sqlmap" value="classpath:io/noep/dao/sqlmap.xml"/>
     </bean>
 
     <bean id="unmarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
         <property name="contextPath" value="io.noep.jaxb"/>
     </bean>
+
+
 
     <context:annotation-config/>
 </beans>

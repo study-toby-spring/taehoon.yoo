@@ -3,6 +3,8 @@ package io.noep.service.sqlservice;
 import io.noep.dao.UserDao;
 import io.noep.jaxb.SqlType;
 import io.noep.jaxb.Sqlmap;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.oxm.Unmarshaller;
 
 import javax.annotation.PostConstruct;
@@ -39,6 +41,10 @@ public class OxmSqlService implements SqlService {
         this.oxmSqlReader.setSqlmapFile(sqlmapFile);
     }
 
+    public void setSqlmap(Resource resource) {
+        this.oxmSqlReader.setSqlmap(resource);
+    }
+
     @PostConstruct
     public void loadSql() {
         this.baseSqlService.setSqlReader(this.oxmSqlReader);
@@ -51,6 +57,7 @@ public class OxmSqlService implements SqlService {
 
         private Unmarshaller unmarshaller;
         private String sqlmapFile;
+        private Resource sqlmap = new ClassPathResource("sqlmap.xml", UserDao.class);
 
         public void setUnmarshaller(Unmarshaller unmarshaller) {
             this.unmarshaller = unmarshaller;
@@ -60,12 +67,16 @@ public class OxmSqlService implements SqlService {
             this.sqlmapFile = sqlmapFile;
         }
 
+        public void setSqlmap(Resource sqlmap) {
+            this.sqlmap = sqlmap;
+        }
+
         @Override
         public void read(SqlRegistry sqlRegistry) {
 
             try {
-                Source source = new StreamSource(
-                        UserDao.class.getResourceAsStream(this.sqlmapFile));
+                Source source = new StreamSource(sqlmap.getInputStream());
+
 
                 Sqlmap sqlmap = (Sqlmap) this.unmarshaller.unmarshal(source);
 
@@ -74,7 +85,7 @@ public class OxmSqlService implements SqlService {
                 }
 
             } catch (IOException e) {
-                throw new IllegalArgumentException(this.sqlmapFile + "을 가져올 수 없습니다", e);
+                throw new IllegalArgumentException(this.sqlmap.getFilename() + "을 가져올 수 없습니다", e);
             }
         }
     }
