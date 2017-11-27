@@ -73,6 +73,8 @@
         <property name="contextPath" value="io.noep.jaxb"/>
     </bean>
 
+    <bean id="sqlRegistry" class="io.noep.service.sqlservice.ConcurrentHashMapSqlRegistry"/>
+
 
 
     <context:annotation-config/>
