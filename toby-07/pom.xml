@@ -35,9 +35,23 @@
 
         <dependency>
             <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>3.2.18.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>4.3.10.RELEASE</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>com.springsource.org.hsqldb</artifactId>
+            <version>1.8.0.9</version>
+            <systemPath>${project.basedir}/../lib/com.springsource.org.hsqldb-sources-1.8.0.9.jar</systemPath>
+        </dependency>
+
 
         <dependency>
             <groupId>junit</groupId>
