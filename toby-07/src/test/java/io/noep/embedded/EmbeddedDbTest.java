@@ -26,8 +26,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public class EmbeddedDbTest {
 
-    EmbeddedDatabase db;
-    SimpleJdbcTemplate template;
+    private EmbeddedDatabase db;
+    private SimpleJdbcTemplate template;
 
     @Before
     public void setup() {
