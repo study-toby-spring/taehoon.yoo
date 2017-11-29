@@ -2,10 +2,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 
     <bean id="connectionMaker" class="io.noep.dao.connection.DConnectionMaker"/>
     <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
@@ -73,9 +74,17 @@
         <property name="contextPath" value="io.noep.jaxb"/>
     </bean>
 
-    <bean id="sqlRegistry" class="io.noep.service.sqlservice.ConcurrentHashMapSqlRegistry"/>
+    <!-- ConcurrentHasMapSqlRegistry-->
+    <!--<bean id="sqlRegistry" class="io.noep.service.sqlservice.ConcurrentHashMapSqlRegistry"/>-->
 
+    <!-- 내장 디비 SqlRegistry-->
+    <bean id="sqlRegistry" class="io.noep.service.sqlservice.updatable.EmbeddedDbSqlRegistry">
+        <property name="dataSource" ref="embeddedDatabase"/>
+    </bean>
 
+    <jdbc:embedded-database id="embeddedDatabase" type="HSQL">
+        <jdbc:script location="classpath:io/noep/embedded/schema.sql"/>
+    </jdbc:embedded-database>
 
     <context:annotation-config/>
 </beans>
